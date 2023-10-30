@@ -56,7 +56,7 @@
 					  
 				for (let i = 0; i < addedNodes.length; i++) {
 				const addedElement = addedNodes[i];
-				console.log(addedElement.id);
+				// console.log(addedElement.id);
 				
 			  }
 			  
