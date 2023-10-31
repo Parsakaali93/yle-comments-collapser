@@ -1,50 +1,56 @@
         
-		const buttonHTML = '<button style="background-color:#f1f2f4; color:black; padding:6px; border-radius:15px; margin-bottom:5px; border:none;" class="collapse-button">Piilota vastaukset</button>';
+		const buttonHTML = '<button style="background-color:#f1f2f4; color:black; padding:6px; border-radius:15px; margin-bottom:10px; border:none;" class="collapse-button">Piilota vastaukset</button>';
 		let inserted = false;
 		let observer;
 		let addedButtons = 0;
 		let newEls = 0;
+		let controlComment;
 		
 		// Function to check if the button is available and change its text
 		function insertCollapseButtons() {
 			var comments = document.querySelectorAll('#app [id^="comm"]:not([id^="comment-textarea"])');
-			addedButtons++;
 			
 			if (comments.length > 0 && !inserted) {
 				comments.forEach((comment) => {
 					
-					addedButtons++;
+					if(!controlComment)
+						controlComment = comment;
 					
-					comment.insertAdjacentHTML('beforebegin', buttonHTML);
-					comment.id = "buttonAdded" + comment.id;
-					const CollapseButton = comment.previousElementSibling;
-					
-					CollapseButton.onmouseover = function() {
-									this.style.backgroundColor = '#e8e8e8';
-								};
-
-					CollapseButton.onmouseout = function() {
-						this.style.backgroundColor = '#f1f2f4';
-					};					
-					
-					CollapseButton.addEventListener('click', () => {
-						const ulElement = CollapseButton.parentElement.querySelector('ul');
-						if(ulElement.style.display !== 'none')
-						{
-							ulElement.style.display = 'none';
-							CollapseButton.textContent  = 'Näytä vastaukset';
-
-						}
+					if(comment.clientWidth >= controlComment.clientWidth)
+					{
+						comment.insertAdjacentHTML('beforebegin', buttonHTML);
+						comment.id = "buttonAdded" + comment.id;
+						const CollapseButton = comment.previousElementSibling;
 						
-						else
-						{
-							ulElement.style.display = '';
-							CollapseButton.textContent  = 'Piilota vastaukset';
+						CollapseButton.onmouseover = function() {
+										this.style.backgroundColor = '#e8e8e8';
+									};
 
-						}
+						CollapseButton.onmouseout = function() {
+							this.style.backgroundColor = '#f1f2f4';
+						};					
 						
-						//console.log("kissa");
-					});
+						CollapseButton.addEventListener('click', () => {
+							const ulElement = CollapseButton.parentElement.querySelector('ul');
+							if(ulElement.style.display !== 'none')
+							{
+								ulElement.style.display = 'none';
+								CollapseButton.textContent  = 'Näytä vastaukset';
+
+							}
+							
+							else
+							{
+								ulElement.style.display = '';
+								CollapseButton.textContent  = 'Piilota vastaukset';
+
+							}
+							
+							//console.log("kissa");
+						});
+					}
+					
+					
 				});
 			}
 		}
@@ -61,13 +67,13 @@
 			  }
 			  
 			  // Check if the 'comments-plugin' element has been added
-			  const commentsPluginElement = document.getElementById('yle-comments-plugin');
-			  if (commentsPluginElement) {
-					insertCollapseButtons();
-			  }
-			}
-		  }
-		}
+			const commentsPluginElement = document.querySelector('.comments-plugin-wrapper, #yle-comments-plugin');
+			if (commentsPluginElement) {
+							insertCollapseButtons();
+					  }
+					}
+				  }
+				}
 		
 		observer = new MutationObserver(elementAppearedCallback);
 		
